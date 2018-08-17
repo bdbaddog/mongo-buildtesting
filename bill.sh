@@ -4,8 +4,8 @@
 set -o verbose
 set -o errexit
 
-_CommonArgs="--cache-dir=$(pwd)/cache VERBOSE=0 -j12 --implicit-cache --disable-warnings-as-errors --install-mode=hygienic --link-model=dynamic --allocator=system --js-engine=none --modules= --variables-files= --dbg=off --opt=size install-mobile-dev install-mobile-test"
-
+# _CommonArgs="--cache-dir=$(pwd)/cache VERBOSE=0 -j12 --implicit-cache --disable-warnings-as-errors --install-mode=hygienic --link-model=dynamic --allocator=system --js-engine=none --modules= --variables-files= --dbg=off --opt=size install-mobile-dev install-mobile-test"
+_CommonArgs="--ssl --link-model=dynamic --implicit-cache -j 12 --disable-warnings-as-errors --modules= --variables-files= mongod"
 path_to_nodes=src/third_party/scons-2.5.0/scons-local-2.5.0/SCons/Node/
 
 # scons patch, cache, bfl=on
