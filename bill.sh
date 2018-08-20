@@ -5,16 +5,31 @@ set -o verbose
 set -o errexit
 
 # _CommonArgs="--cache-dir=$(pwd)/cache VERBOSE=0 -j12 --implicit-cache --disable-warnings-as-errors --install-mode=hygienic --link-model=dynamic --allocator=system --js-engine=none --modules= --variables-files= --dbg=off --opt=size install-mobile-dev install-mobile-test"
-_CommonArgs="--cache-dir=$(pwd)/cache --ssl --link-model=dynamic --implicit-cache -j 12 --disable-warnings-as-errors --modules= --variables-files= mongod"
+_CommonArgs="--cache-dir=${HOME}/clients/mongodb/cache --ssl --link-model=dynamic --implicit-cache -j 8 --disable-warnings-as-errors --modules= --variables-files= mongod"
 path_to_nodes=src/third_party/scons-2.5.0/scons-local-2.5.0/SCons/Node/
+
+version=.1
 
 # scons patch, cache, bfl=on
 git checkout r3.7.1
-git clean -xfd
+#git clean -xfd
 cp --verbose ../mongo/${path_to_nodes}/{__init__.py,FS.py} ./${path_to_nodes}/
-mkdir cache
+mkdir -p ${HOME}/clients/mongodb/cache
 
-/usr/bin/time python ./buildscripts/scons.py --build-fast-and-loose=on --cache $_CommonArgs 2>&1 | tee ../patch_cache_bfl_build.log
-/usr/bin/time python ./buildscripts/scons.py --build-fast-and-loose=on --cache $_CommonArgs 2>&1 | tee ../patch_cache_bfl_rebuild.log
+/usr/bin/time python ./buildscripts/scons.py --build-fast-and-loose=on --cache $_CommonArgs 2>&1 | tee ../patch_cache_bfl_build.log${version}
+/usr/bin/time python ./buildscripts/scons.py --build-fast-and-loose=on --cache $_CommonArgs 2>&1 | tee ../patch_cache_bfl_rebuild.log${version}
 \rm -rf build
-/usr/bin/time python ./buildscripts/scons.py --build-fast-and-loose=on --cache $_CommonArgs 2>&1 | tee ../patch_cache_bfl_cacherebuild.log
+/usr/bin/time python ./buildscripts/scons.py --build-fast-and-loose=on --cache $_CommonArgs 2>&1 | tee ../patch_cache_bfl_cacherebuild.log${version}
+
+git checkout r3.7.2
+cp --verbose ../mongo/${path_to_nodes}/{__init__.py,FS.py} ./${path_to_nodes}/
+\rm -rf build
+/usr/bin/time python ./buildscripts/scons.py --build-fast-and-loose=on --cache $_CommonArgs 2>&1 | tee ../patch_cache_bfl_372_build.log${version}
+/usr/bin/time python ./buildscripts/scons.py --build-fast-and-loose=on --cache $_CommonArgs 2>&1 | tee ../patch_cache_bfl_372_rebuild.log${version}
+\rm -rf build
+/usr/bin/time python ./buildscripts/scons.py --build-fast-and-loose=on --cache $_CommonArgs 2>&1 | tee ../patch_cache_bfl_372_cacherebuild.log${version}
+git checkout r3.7.1
+/usr/bin/time python ./buildscripts/scons.py --build-fast-and-loose=on --cache $_CommonArgs 2>&1 | tee ../patch_cache_bfl_371_build.log${version}
+/usr/bin/time python ./buildscripts/scons.py --build-fast-and-loose=on --cache $_CommonArgs 2>&1 | tee ../patch_cache_bfl_371_rebuild.log${version}
+\rm -rf build
+/usr/bin/time python ./buildscripts/scons.py --build-fast-and-loose=on --cache $_CommonArgs 2>&1 | tee ../patch_cache_bfl_371_cacherebuild.log${version}
