@@ -2,6 +2,8 @@
 # Script from JIRA ticket
 # https://jira.mongodb.org/browse/SERVER-21336  & SCons bug 2980
 
+path_to_nodes=src/third_party/scons-2.5.0/scons-local-2.5.0/SCons/Node/
+
 git clean -xfd
 
 cp --verbose ../mongo/${path_to_nodes}/{__init__.py,FS.py} ./${path_to_nodes}/
