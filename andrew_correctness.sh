@@ -18,11 +18,11 @@ git clean -xfd
 cp --verbose ../mongo/${path_to_nodes}/{__init__.py,FS.py} ./${path_to_nodes}/
 
 git checkout r3.7.1
-/usr/bin/time python ./buildscripts/scons.py ${flags} ${target} 2>&1 | tee  ../BUILD.log.371.${revison}.1 
+/usr/bin/time python ./buildscripts/scons.py ${flags} ${target} 2>&1 | tee  ../BUILD.log.371.${revision}.1 
 git checkout r3.7.2
-/usr/bin/time python ./buildscripts/scons.py ${flags} ${target} 2>&1 | tee  ../BUILD.log.372.${revison}.1
+/usr/bin/time python ./buildscripts/scons.py ${flags} ${target} 2>&1 | tee  ../BUILD.log.372.${revision}.1
 git checkout r3.7.1
-/usr/bin/time python ./buildscripts/scons.py ${flags} ${target} 2>&1 | tee  ../BUILD.log.371.${revison}.2
+/usr/bin/time python ./buildscripts/scons.py ${flags} ${target} 2>&1 | tee  ../BUILD.log.371.${revision}.2
 
 # check results . Should be zero g++ -c's
 grep g++ ../BUILD.log.371.2 | grep -- "-c " | wc
