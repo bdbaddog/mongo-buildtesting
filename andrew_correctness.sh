@@ -5,18 +5,23 @@
 set -e
 set -x
 
+plat=$(uname)
+
 
 path_to_nodes=src/third_party/scons-2.5.0/scons-local-2.5.0/SCons/Node/
 cores=8
 
-# Linux
-#flags="-j${cores} --ssl --link-model=dynamic --implicit-cache -j 12 --disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files= --debug=explain"
 
-# MacOS
-flags="-j${cores} --link-model=dynamic --implicit-cache -j 12 --disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files= --cache-debug=- --debug=explain"
-# flags="-j${cores} --link-model=dynamic --implicit-cache -j 12 --disable-warnings-as-errors --cache --build-fast-and-loose=off --modules= --variables-files= --debug=explain"
-flags="-j${cores} --link-model=dynamic  -j 12 --disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files=etc/scons/xcode_macosx.varsg --cache-debug=- --debug=explain"
+if [ "$plat" == "Darwin" ]
+then
+    #MacOS
+    flags="-j${cores} --link-model=dynamic --implicit-cache --disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files=etc/scons/xcode_macosx.varsg --cache-debug=- --debug=explain"
+else
+    # Linux
+    flags="-j${cores} --ssl --link-model=dynamic --implicit-cache --disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files= --debug=explain"
+fi
 
+profile_flags="-m cProfile -o profile_data_$$.pyprof"
 
 log_dir=../logs
 mkdir -p ${log_dir}
@@ -30,19 +35,19 @@ git clean -xfd
 cp -v ../mongo_ssd/${path_to_nodes}/{__init__.py,FS.py} ./${path_to_nodes}/
 
 git checkout r3.7.1
-/usr/bin/time python -m cProfile -o profile_data_371_1.pyprof  ./buildscripts/scons.py ${flags} ${target} 2>&1 | tee  ${log_dir}/BUILD.log.371.${revision}.1
+/usr/bin/time python ${profile_flags}  ./buildscripts/scons.py ${flags} ${target} 2>&1 | tee  ${log_dir}/BUILD.log.371.${revision}.1
 
 # capture sconsign info
 python src/third_party/scons-2.5.0/sconsign.py -e global_initializer.os build/scons/sconsign.dblite > ${log_dir}/CSIG.${revision}.1 2>&1
  
 git checkout r3.7.2
-/usr/bin/time python -m cProfile -o profile_data_372_1.pyprof ./buildscripts/scons.py ${flags} ${target} 2>&1 | tee  ${log_dir}/BUILD.log.372.${revision}.1
+/usr/bin/time python ${profile_flags} ./buildscripts/scons.py ${flags} ${target} 2>&1 | tee  ${log_dir}/BUILD.log.372.${revision}.1
 
 # capture sconsign info
 python src/third_party/scons-2.5.0/sconsign.py -e global_initializer.os build/scons/sconsign.dblite > ${log_dir}/CSIG.${revision}.2 2>&1
 
 git checkout r3.7.1
-/usr/bin/time python -m cProfile -o profile_data_371_2.pyprof ./buildscripts/scons.py ${flags} ${target} 2>&1 | tee  ${log_dir}/BUILD.log.371.${revision}.2
+/usr/bin/time python ${profile_flags} ./buildscripts/scons.py ${flags} ${target} 2>&1 | tee  ${log_dir}/BUILD.log.371.${revision}.2
 
 # capture sconsign info
 python src/third_party/scons-2.5.0/sconsign.py -e global_initializer.os build/scons/sconsign.dblite > ${log_dir}/CSIG.${revision}.3 2>&1
