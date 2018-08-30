@@ -9,20 +9,29 @@ set -x
 path_to_nodes=src/third_party/scons-2.5.0/scons-local-2.5.0/SCons/Node/
 cores=8
 
-# Linux
-#flags="-j${cores} --ssl --link-model=dynamic --implicit-cache -j 12 --disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files= --debug=explain"
+plat=$(uname)
 
-# MacOS
-flags="-j${cores} --link-model=dynamic --implicit-cache -j 12 --disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files= --cache-debug=- --debug=explain"
-# flags="-j${cores} --link-model=dynamic --implicit-cache -j 12 --disable-warnings-as-errors --cache --build-fast-and-loose=off --modules= --variables-files= --debug=explain"
-flags="-j${cores} --link-model=dynamic  -j 12 --disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files=etc/scons/xcode_macosx.varsg --cache-debug=- --debug=explain"
 
+path_to_nodes=src/third_party/scons-2.5.0/scons-local-2.5.0/SCons/Node/
+cores=8
+
+
+if [ "$plat" == "Darwin" ]
+then
+    #MacOS
+    flags="-j${cores} --link-model=dynamic--disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files=etc/scons/xcode_macosx.varsg --cache-debug=- --debug=explain"
+else
+    # Linux
+    flags="-j${cores} --ssl --link-model=dynamic --implicit-cache  --disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files= --debug=explain"
+fi
 
 log_dir=../logs
 mkdir -p ${log_dir}
 
 target=build/cached/mongo/base/global_initializer.os
 # target=./mongod
+#target="install-mobile-dev install-mobile-test"
+
 revision=nic.1
 
 git clean -xfd
