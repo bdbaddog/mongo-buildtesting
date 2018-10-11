@@ -22,7 +22,7 @@ log_dir=../logs
 mkdir -p ${log_dir}
 
 target=build/cached/mongo/base/global_initializer.os
-# target=./mongod
+target=./mongod
 revision=nic.1
 
 git clean -xfd
