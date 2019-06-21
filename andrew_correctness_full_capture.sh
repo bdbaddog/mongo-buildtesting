@@ -19,7 +19,7 @@ cores=8
 if [ "$plat" == "Darwin" ]
 then
     #MacOS
-    flags="-j${cores} --link-model=dynamic--disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files=etc/scons/xcode_macosx.varsg --cache-debug=- --debug=explain"
+    flags="-j${cores} --link-model=dynamic --disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files=etc/scons/xcode_macosx.varsg --cache-debug=- --debug=explain"
 else
     # Linux
     flags="-j${cores} --ssl --link-model=dynamic --implicit-cache  --disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files= --debug=explain"
