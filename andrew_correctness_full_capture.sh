@@ -29,9 +29,13 @@ log_dir=../logs
 mkdir -p ${log_dir}
 
 target=build/cached/mongo/base/global_initializer.os
+<<<<<<< HEAD
 # target=./mongod
 #target="install-mobile-dev install-mobile-test"
 
+=======
+target=./mongod
+>>>>>>> 6827e679347c277a871a5b2aef569b34d79462e8
 revision=nic.1
 
 git clean -xfd

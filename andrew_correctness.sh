@@ -6,11 +6,8 @@ set -e
 set -x
 
 plat=$(uname)
-
-
 path_to_nodes=src/third_party/scons-2.5.0/scons-local-2.5.0/SCons/Node/
 cores=8
-
 
 if [ "$plat" == "Darwin" ]
 then
@@ -21,14 +18,15 @@ else
     flags="-j${cores} --ssl --link-model=dynamic --implicit-cache --disable-warnings-as-errors --cache --build-fast-and-loose=on --modules= --variables-files= --debug=explain"
 fi
 
-profile_flags="-m cProfile -o profile_data_$$.pyprof"
+#profile_flags="-m cProfile -o profile_data_$$.pyprof"
+profile_flags=""
 
 log_dir=../logs
 mkdir -p ${log_dir}
 
-target=build/cached/mongo/base/global_initializer.os
-# target=./mongod
-revision=nic.1
+#target=build/cached/mongo/base/global_initializer.os
+target=./mongod
+revision=.1
 
 git clean -xfd
 
