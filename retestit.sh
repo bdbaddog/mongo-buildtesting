@@ -3,7 +3,7 @@
 set -e
 set -x
 
-DATE=`date +"%Y_%M_%d_%H_%m_%S"`
+DATE=`date +"%Y-%m-%d-%H-%M%S"`
 LOGDIR=../logs/${DATE}
 mkdir -p ${LOGDIR}
 
